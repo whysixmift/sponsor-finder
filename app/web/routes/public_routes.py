@@ -15,8 +15,7 @@ async def landing_page(request: Request):
         sponsors_count = (await session.execute(select(func.count(Sponsor.id)))).scalar_one()
         proposals_count = (await session.execute(select(func.count(ProposalProfile.id)))).scalar_one()
 
-    return templates.TemplateResponse("landing.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="landing.html", context={
         "sponsors_count": sponsors_count,
         "proposals_count": proposals_count
     })

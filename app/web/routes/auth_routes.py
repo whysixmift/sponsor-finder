@@ -14,14 +14,14 @@ templates = Jinja2Templates(directory="app/web/templates")
 async def login_page(request: Request):
     if request.session.get("admin_authenticated"):
         return RedirectResponse(url="/admin", status_code=303)
-    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+    return templates.TemplateResponse(request=request, name="login.html", context={"error": None})
 
 @router.post("/login", response_class=HTMLResponse)
 async def login_submit(request: Request, password: str = Form(...)):
     if password == settings.ADMIN_PASSWORD:
         request.session["admin_authenticated"] = True
         return RedirectResponse(url="/admin", status_code=303)
-    return templates.TemplateResponse("login.html", {"request": request, "error": "Password salah, silakan coba lagi."})
+    return templates.TemplateResponse(request=request, name="login.html", context={"error": "Password salah, silakan coba lagi."})
 
 @router.get("/logout")
 async def logout(request: Request):
@@ -42,8 +42,7 @@ async def google_oauth_callback(request: Request, code: Optional[str] = None, st
         success, res_msg = await google_auth_service.handle_oauth_callback(session, code, user_id)
 
     if success:
-        return templates.TemplateResponse("google_success.html", {
-            "request": request,
+        return templates.TemplateResponse(request=request, name="google_success.html", context={
             "email": res_msg,
             "user_id": user_id
         })

@@ -38,8 +38,7 @@ async def admin_dashboard(request: Request, _ = Depends(check_admin)):
 
     agents_telemetry = [agent.get_status() for agent in ALL_AGENTS]
 
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="dashboard.html", context={
         "sponsors_count": sponsors_count,
         "proposals_count": proposals_count,
         "emails_count": emails_count,
@@ -75,8 +74,7 @@ async def list_sponsors(
         res = await session.execute(stmt)
         sponsors = list(res.scalars().all())
 
-    return templates.TemplateResponse("sponsors.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="sponsors.html", context={
         "sponsors": sponsors,
         "q": q or "",
         "cat": cat or "all",
@@ -118,8 +116,7 @@ async def list_emails(request: Request, _ = Depends(check_admin)):
         res = await session.execute(stmt)
         items = list(res.all())
 
-    return templates.TemplateResponse("emails.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="emails.html", context={
         "items": items
     })
 
@@ -130,8 +127,7 @@ async def list_users(request: Request, _ = Depends(check_admin)):
         res = await session.execute(stmt)
         users = list(res.scalars().all())
 
-    return templates.TemplateResponse("users.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="users.html", context={
         "users": users
     })
 
@@ -194,8 +190,7 @@ async def view_settings(request: Request, _ = Depends(check_admin)):
         with open(env_path, "r", encoding="utf-8") as f:
             raw_env = f.read()
 
-    return templates.TemplateResponse("settings.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="settings.html", context={
         "settings": settings,
         "raw_env": raw_env
     })
