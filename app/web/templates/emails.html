@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Email Outreach - Sponsor Finder{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto">
+  <div>
+    <h2 class="text-2xl font-bold tracking-tight text-white">Antrean Pengiriman Cold Email Sponsorship</h2>
+    <p class="text-sm text-slate-400 mt-1">Pemantauan surat penawaran sponsorship yang disusun oleh AI beserta status lampiran proposal.</p>
+  </div>
+
+  <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-300">
+        <thead class="text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
+          <tr>
+            <th class="px-6 py-4 font-semibold">Tujuan Sponsor</th>
+            <th class="px-6 py-4 font-semibold">Subjek Email</th>
+            <th class="px-6 py-4 font-semibold">Status</th>
+            <th class="px-6 py-4 font-semibold">Lampiran Dokumen</th>
+            <th class="px-6 py-4 font-semibold">Waktu Dibuat</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          {% for email_rec, sponsor in items %}
+          <tr class="hover:bg-slate-900/40 transition">
+            <td class="px-6 py-4">
+              <span class="font-bold text-white block">{{ sponsor.name }}</span>
+              <span class="text-xs font-mono text-emerald-400">{{ email_rec.recipient_email }}</span>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-300 max-w-sm truncate">{{ email_rec.subject }}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-medium {% if email_rec.status == 'sent' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20{% elif email_rec.status == 'draft' %}bg-amber-500/10 text-amber-400 border border-amber-500/20{% else %}bg-rose-500/10 text-rose-400 border border-rose-500/20{% endif %}">
+                {{ email_rec.status.upper() }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-400 flex items-center space-x-1.5">
+              {% if email_rec.attachment_path %}
+              <i class="fa-solid fa-paperclip text-amber-400"></i>
+              <span class="truncate max-w-[150px]">{{ email_rec.attachment_path.split('/')[-1] }}</span>
+              {% else %}
+              <span class="text-slate-600">Tidak ada</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 text-xs font-mono text-slate-500">{{ email_rec.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          </tr>
+          {% endfor %}
+          {% if not items %}
+          <tr>
+            <td colspan="5" class="px-6 py-8 text-center text-slate-500 text-xs">Belum ada email di dalam antrean outreach.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

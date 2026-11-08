@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Overview - Sponsor Finder{% endblock %}
+
+{% block content %}
+<div class="space-y-8 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div>
+    <h2 class="text-2xl font-bold tracking-tight text-white">Ringkasan Sistem & Performa Hunter</h2>
+    <p class="text-sm text-slate-400 mt-1">Monitoring telemetri 8 Agen Otonom, metrik database, dan status outreach.</p>
+  </div>
+
+  <!-- Metric Cards Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Perusahaan Sponsor</p>
+          <p class="text-3xl font-extrabold text-white mt-2">{{ sponsors_count }}</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-building"></i>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 mt-4 flex items-center">
+        <i class="fa-solid fa-earth-americas mr-1 text-emerald-400"></i>
+        Indonesia & Internasional
+      </p>
+    </div>
+
+    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Proposal Masuk</p>
+          <p class="text-3xl font-extrabold text-white mt-2">{{ proposals_count }}</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-file-contract"></i>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 mt-4 flex items-center">
+        <i class="fa-solid fa-brain mr-1 text-indigo-400"></i>
+        Parsed & AI Profiled
+      </p>
+    </div>
+
+    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Outreach</p>
+          <p class="text-3xl font-extrabold text-white mt-2">{{ emails_count }}</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 mt-4 flex items-center">
+        <i class="fa-solid fa-paperclip mr-1 text-amber-400"></i>
+        Auto-Attached Proposal
+      </p>
+    </div>
+
+    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">User Whitelist</p>
+          <p class="text-3xl font-extrabold text-white mt-2">{{ users_count }}</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 mt-4 flex items-center">
+        <i class="fa-brands fa-telegram mr-1 text-cyan-400"></i>
+        SaaS Private Beta Gate
+      </p>
+    </div>
+  </div>
+
+  <!-- Agent Telemetry Grid -->
+  <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+    <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+      <div>
+        <h3 class="font-bold text-lg text-white">Telemetri Multi-Agent ("1 Feature = 1 Agent")</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Pemantauan kesehatan status eksekusi real-time seluruh 8 agen otonom.</p>
+      </div>
+      <form action="/admin/trigger/discovery" method="post">
+        <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs rounded-lg transition flex items-center space-x-2">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Trigger Live Discovery</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-300">
+        <thead class="text-xs uppercase bg-slate-900/80 text-slate-400 border-b border-slate-800">
+          <tr>
+            <th class="px-6 py-4 font-semibold">Nama Agen</th>
+            <th class="px-6 py-4 font-semibold">Fungsi & Fitur</th>
+            <th class="px-6 py-4 font-semibold">Status</th>
+            <th class="px-6 py-4 font-semibold">Total Runs</th>
+            <th class="px-6 py-4 font-semibold">Sukses / Gagal</th>
+            <th class="px-6 py-4 font-semibold">Durasi Terakhir</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          {% for agent in agents %}
+          <tr class="hover:bg-slate-900/40 transition">
+            <td class="px-6 py-4 font-semibold text-white flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full {% if agent.status == 'Running' %}bg-amber-400 animate-ping{% elif agent.status == 'Error' %}bg-rose-500{% else %}bg-emerald-400{% endif %}"></span>
+              <span>{{ agent.name }}</span>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-400 max-w-xs truncate">{{ agent.feature }}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-medium {% if agent.status == 'Idle / Healthy' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20{% elif agent.status == 'Running' %}bg-amber-500/10 text-amber-400 border border-amber-500/20{% else %}bg-rose-500/10 text-rose-400 border border-rose-500/20{% endif %}">
+                {{ agent.status }}
+              </span>
+            </td>
+            <td class="px-6 py-4 font-mono text-xs">{{ agent.total_runs }}</td>
+            <td class="px-6 py-4 text-xs">
+              <span class="text-emerald-400">{{ agent.successful_runs }}</span> / <span class="text-rose-400">{{ agent.failed_runs }}</span>
+            </td>
+            <td class="px-6 py-4 font-mono text-xs text-slate-400">{{ agent.duration_sec }}s</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Sponsors Added -->
+  <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+    <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+      <h3 class="font-bold text-lg text-white">Sponsor Terbaru Dalam Katalog</h3>
+      <a href="/admin/sponsors" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">Buka Semua &rarr;</a>
+    </div>
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for s in recent_sponsors %}
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300">{{ s.category }}</span>
+              <span class="text-xs text-slate-400">{{ s.region }}</span>
+            </div>
+            <h4 class="font-bold text-base text-white mt-2">{{ s.name }}</h4>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">{{ s.description }}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-mono">{{ s.contact_email or 'No email' }}</span>
+            {% if s.website %}
+            <a href="{{ s.website }}" target="_blank" class="text-slate-400 hover:text-white"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

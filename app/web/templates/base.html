@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Sponsor Finder Admin Dashboard{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between shrink-0">
+    <div>
+      <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center font-bold text-white shadow-lg">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-tight text-white">Sponsor Finder</h1>
+          <p class="text-xs text-amber-400 font-medium">Enterprise AI Hunter</p>
+        </div>
+      </div>
+
+      <nav class="p-4 space-y-1.5 text-sm font-medium">
+        <a href="/admin" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+          <i class="fa-solid fa-chart-pie w-5 text-indigo-400"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="/admin/sponsors" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+          <i class="fa-solid fa-building w-5 text-emerald-400"></i>
+          <span>Katalog Sponsor</span>
+        </a>
+        <a href="/admin/emails" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+          <i class="fa-solid fa-envelope-open-text w-5 text-amber-400"></i>
+          <span>Email Outreach</span>
+        </a>
+        <a href="/admin/users" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+          <i class="fa-solid fa-users w-5 text-cyan-400"></i>
+          <span>Whitelist User</span>
+        </a>
+        <a href="/admin/settings" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">
+          <i class="fa-solid fa-sliders w-5 text-purple-400"></i>
+          <span>Pengaturan .env</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-slate-800">
+      <a href="/logout" class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 transition text-sm">
+        <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+        <span>Keluar (Logout)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    <header class="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur px-8 flex items-center justify-between sticky top-0 z-20">
+      <div class="flex items-center space-x-4">
+        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Dual-Port VPS Cluster</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+          Ports 20138 (Bot) / 20139 (Web) Live
+        </span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="/" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 transition flex items-center space-x-1">
+          <span>Lihat Landing Page</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="p-8">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+</body>
+</html>
