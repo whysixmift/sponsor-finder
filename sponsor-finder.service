@@ -1,0 +1,15 @@
+[Unit]
+Description=Sponsor Finder Multi-Agent Platform & Bot
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/sponsor-finder
+EnvironmentFile=/root/sponsor-finder/.env
+ExecStart=/root/sponsor-finder/.venv/bin/python main.py all
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
